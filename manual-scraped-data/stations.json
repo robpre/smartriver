@@ -1,0 +1,77 @@
+{
+  "@context": "http://environment.data.gov.uk/flood-monitoring/meta/context.jsonld",
+  "meta": {
+    "publisher": "Environment Agency",
+    "licence": "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+    "documentation": "http://environment.data.gov.uk/flood-monitoring/doc/reference",
+    "version": "0.9",
+    "comment": "Status: Beta service",
+    "hasFormat": [
+      "http://environment.data.gov.uk/flood-monitoring/id/stations.csv?RLOIid=6094&RLOIid=6099",
+      "http://environment.data.gov.uk/flood-monitoring/id/stations.rdf?RLOIid=6094&RLOIid=6099",
+      "http://environment.data.gov.uk/flood-monitoring/id/stations.ttl?RLOIid=6094&RLOIid=6099",
+      "http://environment.data.gov.uk/flood-monitoring/id/stations.html?RLOIid=6094&RLOIid=6099"
+    ]
+  },
+  "items": [
+    {
+      "@id": "http://environment.data.gov.uk/flood-monitoring/id/stations/E23186",
+      "RLOIid": "6099",
+      "catchmentName": "Broadland Rivers",
+      "dateOpened": "1979-10-02",
+      "easting": 619202,
+      "gridReference": "TG 19201 29599",
+      "label": "Ingworth",
+      "lat": 52.819304,
+      "long": 1.251666,
+      "measures": [
+        {
+          "@id": "http://environment.data.gov.uk/flood-monitoring/id/measures/E23186-level-stage-i-15_min-m",
+          "parameter": "level",
+          "parameterName": "Water Level",
+          "period": 900,
+          "qualifier": "Stage",
+          "unitName": "m"
+        }
+      ],
+      "northing": 329597,
+      "notation": "E23186",
+      "riverName": "River Bure",
+      "stageScale": "http://environment.data.gov.uk/flood-monitoring/id/stations/E23186/stageScale",
+      "stationReference": "E23186",
+      "status": "http://environment.data.gov.uk/flood-monitoring/def/core/statusActive",
+      "town": "Ingworth",
+      "wiskiID": "034003"
+    },
+    {
+      "@id": "http://environment.data.gov.uk/flood-monitoring/id/stations/E21836",
+      "RLOIid": "6094",
+      "catchmentName": "Broadland Rivers",
+      "dateOpened": "2001-11-08",
+      "datumOffset": 28.441,
+      "easting": 610698,
+      "gridReference": "TG 10699 30509",
+      "label": "Corpusty",
+      "lat": 52.830878,
+      "long": 1.126258,
+      "measures": [
+        {
+          "@id": "http://environment.data.gov.uk/flood-monitoring/id/measures/E21836-level-stage-i-15_min-mASD",
+          "parameter": "level",
+          "parameterName": "Water Level",
+          "period": 900,
+          "qualifier": "Stage",
+          "unitName": "mASD"
+        }
+      ],
+      "northing": 330509,
+      "notation": "E21836",
+      "riverName": "River Bure",
+      "stageScale": "http://environment.data.gov.uk/flood-monitoring/id/stations/E21836/stageScale",
+      "stationReference": "E21836",
+      "status": "http://environment.data.gov.uk/flood-monitoring/def/core/statusActive",
+      "town": "Corpusty",
+      "wiskiID": "L034053"
+    }
+  ]
+}
