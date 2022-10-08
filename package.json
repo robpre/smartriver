@@ -6,11 +6,11 @@
     "prepare": "husky install",
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "dotenv -e .env.deploy -- cdk deploy --require-approval never",
     "start": "next start",
     "lint": "next lint",
     "synth:local": "APP_STAGE=local cdk synth",
     "deploy:local": "APP_STAGE=local cdk deploy",
-    "deploy:vercel": "cdk deploy --outputs-file ./.secrets.json",
     "parse": "for f in manual-scraped-data/*.csv; do csvtojson \"${f}\" > \"${f}.json\"; done"
   },
   "lint-staged": {

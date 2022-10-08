@@ -8,10 +8,22 @@ export const SLUG_BRANCH_NAME = BRANCH_NAME.replace(/[^a-z0-9]+/g, "-");
 const branchStage = BRANCH_NAME === "main" ? "production" : SLUG_BRANCH_NAME;
 export const APP_STAGE = process.env.APP_STAGE || branchStage;
 
-export const getSecrets = async (): Promise<SecretType> => {
+export const APP_NAME = `sr-${APP_STAGE}`;
+
+export const getSecrets = () => {
   try {
-    return import("../.secrets.json");
+    const file = require("../.secrets.json") as SecretType;
+
+    if (!file[APP_NAME]) {
+      throw new Error(`Missing ${APP_NAME} in ${Object.keys(file)}`);
+    }
+
+    return file[APP_NAME];
   } catch (err) {
+    if (err && (err as { code: string }).code === "MODULE_NOT_FOUND") {
+      return null;
+    }
+
     throw err;
   }
 };

@@ -1,5 +1,6 @@
 {
   "app": "npx ts-node --prefer-ts-exts infra/entrypoint.ts",
+  "outputsFile": ".secrets.json",
   "watch": {
     "include": ["**"],
     "exclude": [

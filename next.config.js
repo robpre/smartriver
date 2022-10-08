@@ -12,11 +12,13 @@ const nextConfig = {
     if (!ctx.isServer) {
       /** @type {import('webpack').IgnorePlugin} */
       const plugin = new ctx.webpack.IgnorePlugin({
-        resourceRegExp: /SECRET.json/,
+        resourceRegExp: /.secrets.json/,
       });
 
       config.plugins.push(plugin);
     }
+
+    return config;
   },
 };
 
