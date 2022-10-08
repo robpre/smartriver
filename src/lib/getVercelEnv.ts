@@ -1,5 +1,5 @@
 import { createHash } from "crypto";
-import { BRANCH_NAME, NODE_ENV } from "../config";
+import { BRANCH_NAME, NODE_ENV, SLUG_BRANCH_NAME } from "../config";
 
 const sha256 = (s: string) => {
   const h = createHash("sha256");
@@ -13,12 +13,10 @@ const projectName = "smartriver";
 const prefix = "git";
 const scope = "robpre";
 
-export const slugBranchName = BRANCH_NAME.replace(/[^a-z0-9]+/g, "-");
-
 export const stageSlug = () => {
   // https://vercel.com/docs/concepts/deployments/generated-urls#url-with-git-branch
   // <project-name>-git-<branch-name>-<scope-slug>.vercel.app
-  let slug = [projectName, prefix, slugBranchName, scope].join("-");
+  let slug = [projectName, prefix, SLUG_BRANCH_NAME, scope].join("-");
 
   // https://vercel.com/docs/concepts/deployments/generated-urls#truncation
   if (slug.length > 63) {
@@ -32,7 +30,7 @@ export const stageSlug = () => {
     slug = [
       projectName,
       prefix,
-      slugBranchName.slice(0, -longByLength),
+      SLUG_BRANCH_NAME.slice(0, -longByLength),
       hash,
       scope,
     ].join("-");

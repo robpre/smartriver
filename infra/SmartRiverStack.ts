@@ -3,10 +3,18 @@ import * as s3 from "aws-cdk-lib/aws-s3";
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { CfnOutput } from "aws-cdk-lib";
+import type { OutputObject } from "../.secrets.json";
 
 export interface Props extends cdk.StackProps {
   stage: string;
 }
+
+const output = (stack: cdk.Stack, key: keyof OutputObject, value: string) => {
+  new CfnOutput(stack, key, {
+    value,
+    exportName: key,
+  });
+};
 
 export class SmartRiverStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: Props) {
@@ -28,11 +36,11 @@ export class SmartRiverStack extends cdk.Stack {
       user: vercelUser,
     });
 
-    new CfnOutput(this, `vercel-access-id`, {
-      value: accessKey.accessKeyId,
-    });
-    new CfnOutput(this, `vercel-access-secret`, {
-      value: accessKey.secretAccessKey.toString(),
-    });
+    output(this, `VERCEL_ACCESS_KEY_ID`, accessKey.accessKeyId);
+    output(
+      this,
+      `VERCEL_ACCESS_KEY_SECRET`,
+      accessKey.secretAccessKey.unsafeUnwrap()
+    );
   }
 }
