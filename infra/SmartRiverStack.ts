@@ -5,6 +5,7 @@ import * as s3Deploy from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 import { CfnOutput } from "aws-cdk-lib";
 import type { OutputObject } from "../.secrets.json";
+import { stripNonAlpha } from "../src/lib/stripNonAlpha";
 
 export interface Props extends cdk.StackProps {
   stage: string;
@@ -13,8 +14,9 @@ export class SmartRiverStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
 
-    const historyReadingsBucket = new s3.Bucket(this, "historic-readings", {
+    const historyReadingsBucket = new s3.Bucket(this, `historic-readings`, {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: props.stage !== "production",
       cors: [
         {
           allowedHeaders: ["*"],
@@ -22,11 +24,6 @@ export class SmartRiverStack extends cdk.Stack {
           allowedMethods: [s3.HttpMethods.POST],
         },
       ],
-    });
-    new s3Deploy.BucketDeployment(this, "DeployWebsite", {
-      sources: [s3Deploy.Source.asset("./manual-scraped-data")],
-      destinationBucket: historyReadingsBucket,
-      destinationKeyPrefix: "manual-scraped-data", // optional prefix in destination bucket
     });
 
     const vercelUser = new iam.User(this, `vercel-functions-user`);
@@ -36,12 +33,15 @@ export class SmartRiverStack extends cdk.Stack {
 
     historyReadingsBucket.grantReadWrite(vercelUser);
 
-    this.output("vercelAccessKeyId", accessKey.accessKeyId);
+    this.output(`${stripNonAlpha(id)}vercelAccessKeyId`, accessKey.accessKeyId);
     this.output(
-      "vercelAccessKeySecret",
+      `${stripNonAlpha(id)}vercelAccessKeySecret`,
       accessKey.secretAccessKey.unsafeUnwrap()
     );
-    this.output("historicReadingsBucket", historyReadingsBucket.bucketName);
+    this.output(
+      `${stripNonAlpha(id)}historicReadingsBucket`,
+      historyReadingsBucket.bucketName
+    );
   }
 
   output = (key: keyof OutputObject, value: string) => {

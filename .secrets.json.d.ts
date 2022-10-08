@@ -6,9 +6,9 @@
 // }
 
 export interface OutputObject {
-  vercelAccessKeyId: string;
-  vercelAccessKeySecret: string;
-  historicReadingsBucket: string;
+  [key: `${string}vercelAccessKeyId`]: string;
+  [key: `${string}vercelAccessKeySecret`]: string;
+  [key: `${string}historicReadingsBucket`]: string;
 }
 
 type Contents = Record<string, OutputObject>;

@@ -1,6 +1,6 @@
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import { getSecrets } from "../config";
+import { getSecrets } from "../getSecrets";
 
 const Home: NextPage = () => {
   return (
@@ -17,6 +17,10 @@ const Home: NextPage = () => {
 };
 
 export const getStaticProps: GetStaticProps = () => {
+  const s = getSecrets();
+
+  if (s) {
+  }
   return {
     props: {},
   };
