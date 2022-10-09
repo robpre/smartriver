@@ -6,11 +6,12 @@
     "prepare": "husky install",
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "dotenv -e .env.deploy -- cdk deploy --require-approval never",
+    "postbuild": "dotenv -e .env.deploy -- yarn deploy:ci",
     "start": "next start",
     "lint": "next lint",
     "synth:local": "APP_STAGE=local cdk synth",
-    "deploy:local": "APP_STAGE=local cdk deploy",
+    "deploy:local": "APP_STAGE=local cdk deploy 2>&1 | ts-node ops/filter.ts",
+    "deploy:ci": "cdk deploy --require-approval never 2>&1 | ts-node ops/filter.ts",
     "parse": "for f in manual-scraped-data/*.csv; do csvtojson \"${f}\" > \"${f}.json\"; done"
   },
   "lint-staged": {
