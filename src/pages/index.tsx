@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from "next";
+import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import stations from "../../manual-scraped-data/stations.json";
 import { getSecrets } from "../getSecrets";
@@ -71,7 +71,7 @@ const Home: NextPage<Props> = ({ allReadings }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const allReadings = await Promise.all(
     stations.items.map(async (station) => {
       return {
