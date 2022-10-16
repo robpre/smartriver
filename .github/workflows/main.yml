@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          export STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "authorization: ${CRON_API_SECRET}" "https://smartriver.top/api/cron")
+          export STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "authorization: ${{ secrets.CRON_API_SECRET }}" "https://smartriver.top/api/cron")
           if [[ "$STATUS" != "200" ]]; then
             echo "Error contacting api/cron $STATUS";
             exit 1;
