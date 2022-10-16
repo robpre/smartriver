@@ -8,7 +8,7 @@
     "build": "next build",
     "prebuild:ci": "next lint",
     "build:ci": "dotenv -e .env.deploy -- yarn deploy:ci",
-    "postbuild:ci": "next build",
+    "postbuild:ci": "next build && cp .secrets.json .next/",
     "start": "next start",
     "lint": "next lint",
     "synth:local": "APP_STAGE=local cdk synth",

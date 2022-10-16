@@ -22,18 +22,13 @@ const printDir = (dir: string) => {
  * SSR only
  */
 export const getSecrets = memo(() => {
-  let fullpath = pathlib.join(process.cwd(), ".secrets.json");
-
-  if (NODE_ENV === "production") {
-    fullpath = pathlib.join(process.cwd(), ".next", ".secrets.json");
-  }
+  const fullpath = pathlib.join(process.cwd(), ".secrets.json");
 
   printDir(process.cwd());
-  printDir(pathlib.join(process.cwd(), ".next"));
+  printDir(pathlib.dirname(fullpath));
 
   try {
-    const contents = fs.readFileSync(fullpath).toString();
-    const file = JSON.parse(contents) as SecretType;
+    const file = require(fullpath) as SecretType;
 
     if (!file[APP_NAME]) {
       throw new MissingEnvKeyError(
