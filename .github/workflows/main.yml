@@ -8,7 +8,7 @@ jobs:
     steps:
       - run: |
           export STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "authorization: ${CRON_API_SECRET}" "https://smartriver.top/api/cron")
-          if [[ "$STATUS" ne "200" ]]; then
+          if [[ "$STATUS" != "200" ]]; then
             echo "Error contacting api/cron $STATUS";
             exit 1;
           fi
