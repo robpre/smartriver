@@ -1,7 +1,7 @@
 import pathlib from "path";
 import fs from "fs";
 import type SecretType from "../.secrets.json";
-import { APP_NAME, mustGet } from "./config";
+import { APP_NAME, mustGet, NODE_ENV } from "./config";
 import { memo } from "./lib/memo";
 
 class MissingEnvKeyError extends Error {
@@ -18,7 +18,12 @@ class MissingEnvKeyError extends Error {
  * SSR only
  */
 export const getSecrets = memo(() => {
-  const fullpath = pathlib.join(process.cwd(), ".secrets.json");
+  let fullpath = pathlib.join(process.cwd(), ".secrets.json");
+
+  if (NODE_ENV === "production") {
+    fullpath = pathlib.join(process.cwd(), ".next", ".secrets.json");
+  }
+
   try {
     const contents = fs.readFileSync(fullpath).toString();
     const file = JSON.parse(contents) as SecretType;
