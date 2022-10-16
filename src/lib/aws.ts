@@ -10,8 +10,8 @@ const secrets = getSecrets();
 
 const credentials: Credentials | undefined = secrets
   ? {
-      accessKeyId: secrets?.vercelAccessKeyId,
-      secretAccessKey: secrets?.vercelAccessKeySecret,
+      accessKeyId: secrets.vercelAccessKeyId,
+      secretAccessKey: secrets.vercelAccessKeySecret,
     }
   : undefined;
 const region = "eu-west-2";

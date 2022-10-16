@@ -21,14 +21,20 @@ export const getSecrets = memo(() => {
     };
   } catch (err) {
     if (err && (err as { code: string }).code === "MODULE_NOT_FOUND") {
-      return {
-        vercelAccessKeyId: "",
-        vercelAccessKeySecret: "",
-        historicReadingsBucket: "",
-        appStorageTableName: "",
-      };
+      console.error("missing data");
+      return null;
     }
 
     throw err;
   }
 });
+
+export const mustGetSecrets = () => {
+  const secrets = getSecrets();
+
+  if (!secrets) {
+    throw new Error("Need secrets here");
+  }
+
+  return secrets;
+};

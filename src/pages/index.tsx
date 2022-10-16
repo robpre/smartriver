@@ -1,13 +1,8 @@
 import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import stations from "../../manual-scraped-data/stations.json";
-import { getSecrets } from "../getSecrets";
 import { getReadings } from "../lib/bucketStorage";
-import {
-  AllManualData,
-  manualHeightData,
-  ConvertedCSV,
-} from "../lib/processReadings";
+import { manualHeightData, ConvertedCSV } from "../lib/processReadings";
 import { LatestReading, StationID } from "../types/StationResponse";
 
 interface Props {

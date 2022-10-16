@@ -1,12 +1,9 @@
-import { SendEmailCommand } from "@aws-sdk/client-ses";
 import { NextApiHandler } from "next";
 import fetch from "node-fetch";
 import stations from "../../../manual-scraped-data/stations.json";
 import { CRON_API_SECRET, NODE_ENV, NOTIFICATION_EMAILS } from "../../config";
-import { getSecrets } from "../../getSecrets";
-import { aws } from "../../lib/aws";
 import { addReading, saveStation } from "../../lib/bucketStorage";
-import { StationLabel, Station } from "../../types/StationResponse";
+import { Station } from "../../types/StationResponse";
 
 // const maybeSendEmail = async (station: Station) => {
 //   const { ses } = aws();

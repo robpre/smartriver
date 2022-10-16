@@ -1,5 +1,5 @@
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { getSecrets } from "../getSecrets";
+import { mustGetSecrets } from "../getSecrets";
 import { Key, Entity, EntityNames, NoKey } from "../types/DB";
 import { aws } from "./aws";
 
@@ -8,7 +8,7 @@ export async function putItem<E extends EntityNames>(
   obj: NoKey<Entity<E>>
 ): Promise<Entity<E>> {
   const { db } = aws();
-  const { appStorageTableName } = getSecrets();
+  const { appStorageTableName } = mustGetSecrets();
 
   const Item: Entity<E> = {
     ...obj,
@@ -29,7 +29,7 @@ export async function getItem<E extends EntityNames>(
   key: Key<E>
 ): Promise<Entity<E> | null> {
   const { db } = aws();
-  const { appStorageTableName } = getSecrets();
+  const { appStorageTableName } = mustGetSecrets();
 
   const response = await db.send(
     new GetCommand({
