@@ -1,4 +1,5 @@
 import pathlib from "path";
+import fs from "fs";
 import type SecretType from "../.secrets.json";
 import { APP_NAME, mustGet } from "./config";
 import { memo } from "./lib/memo";
@@ -17,11 +18,10 @@ class MissingEnvKeyError extends Error {
  * SSR only
  */
 export const getSecrets = memo(() => {
+  const fullpath = pathlib.join(process.cwd(), ".secrets.json");
   try {
-    const file = require(pathlib.join(
-      process.cwd(),
-      ".secrets.json"
-    )) as SecretType;
+    const contents = fs.readFileSync(fullpath).toString();
+    const file = JSON.parse(contents) as SecretType;
 
     if (!file[APP_NAME]) {
       throw new MissingEnvKeyError(
@@ -39,8 +39,9 @@ export const getSecrets = memo(() => {
   } catch (err) {
     if (err && typeof err == "object" && "code" in err) {
       const errCode = (err as { code: unknown }).code;
+
       if (errCode === "MODULE_NOT_FOUND" || errCode === "MISSING_ENV") {
-        console.warn("missing data in env, ", err);
+        console.warn(`path(${fullpath}) missing data in env, `, err);
 
         return {
           vercelAccessKeyId: "",
