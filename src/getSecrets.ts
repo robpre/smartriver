@@ -1,4 +1,5 @@
-import SecretType from "../.secrets.json";
+import pathlib from "path";
+import type SecretType from "../.secrets.json";
 import { APP_NAME, mustGet } from "./config";
 import { memo } from "./lib/memo";
 
@@ -17,7 +18,10 @@ class MissingEnvKeyError extends Error {
  */
 export const getSecrets = memo(() => {
   try {
-    const file = require("../.secrets.json") as SecretType;
+    const file = require(pathlib.join(
+      process.cwd(),
+      ".secrets.json"
+    )) as SecretType;
 
     if (!file[APP_NAME]) {
       throw new MissingEnvKeyError(
