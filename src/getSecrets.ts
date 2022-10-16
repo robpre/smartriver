@@ -1,10 +1,11 @@
 import SecretType from "../.secrets.json";
 import { APP_NAME, mustGet } from "./config";
+import { memo } from "./lib/memo";
 
 /**
  * SSR only
  */
-export const getSecrets = () => {
+export const getSecrets = memo(() => {
   try {
     const file = require("../.secrets.json") as SecretType;
 
@@ -16,12 +17,18 @@ export const getSecrets = () => {
       vercelAccessKeyId: mustGet(file[APP_NAME], "vercelAccessKeyId"),
       vercelAccessKeySecret: mustGet(file[APP_NAME], "vercelAccessKeySecret"),
       historicReadingsBucket: mustGet(file[APP_NAME], "historicReadingsBucket"),
+      appStorageTableName: mustGet(file[APP_NAME], "appStorageTableName"),
     };
   } catch (err) {
     if (err && (err as { code: string }).code === "MODULE_NOT_FOUND") {
-      return null;
+      return {
+        vercelAccessKeyId: "",
+        vercelAccessKeySecret: "",
+        historicReadingsBucket: "",
+        appStorageTableName: "",
+      };
     }
 
     throw err;
   }
-};
+});

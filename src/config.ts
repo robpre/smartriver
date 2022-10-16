@@ -6,6 +6,11 @@ export const BRANCH_NAME =
 export const NODE_ENV = process.env.NODE_ENV;
 export const SLUG_BRANCH_NAME = BRANCH_NAME.replace(/[^a-z0-9]+/g, "-");
 
+export const CRON_API_SECRET = process.env.CRON_API_SECRET;
+
+export const NOTIFICATION_EMAILS =
+  process.env.NOTIFICATION_EMAILS?.split(",") || [];
+
 const branchStage = BRANCH_NAME === "main" ? "production" : SLUG_BRANCH_NAME;
 export const APP_STAGE =
   NODE_ENV === "development" ? "local" : process.env.APP_STAGE || branchStage;

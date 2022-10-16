@@ -1,5 +1,6 @@
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as s3 from "aws-cdk-lib/aws-s3";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as cdk from "aws-cdk-lib";
 import * as s3Deploy from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
@@ -11,8 +12,10 @@ export interface Props extends cdk.StackProps {
   stage: string;
 }
 export class SmartRiverStack extends cdk.Stack {
+  id: string;
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
+    this.id = id;
 
     const historyReadingsBucket = new s3.Bucket(this, `historic-readings`, {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
@@ -31,23 +34,38 @@ export class SmartRiverStack extends cdk.Stack {
       user: vercelUser,
     });
 
+    vercelUser.addToPolicy(
+      new iam.PolicyStatement({
+        actions: ["ses:SendEmail", "SES:SendRawEmail"],
+        resources: ["*"],
+        effect: iam.Effect.ALLOW,
+      })
+    );
     historyReadingsBucket.grantReadWrite(vercelUser);
 
-    this.output(`${stripNonAlpha(id)}vercelAccessKeyId`, accessKey.accessKeyId);
+    const db = new dynamodb.Table(this, "app-storage", {
+      partitionKey: { name: "id", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "entity", type: dynamodb.AttributeType.STRING },
+      removalPolicy:
+        props.stage !== "production"
+          ? cdk.RemovalPolicy.DESTROY
+          : cdk.RemovalPolicy.RETAIN,
+    });
+    db.grantFullAccess(vercelUser);
+
+    this.output(`appStorageTableName`, db.tableName);
+    this.output(`vercelAccessKeyId`, accessKey.accessKeyId);
     this.output(
-      `${stripNonAlpha(id)}vercelAccessKeySecret`,
+      `vercelAccessKeySecret`,
       accessKey.secretAccessKey.unsafeUnwrap()
     );
-    this.output(
-      `${stripNonAlpha(id)}historicReadingsBucket`,
-      historyReadingsBucket.bucketName
-    );
+    this.output(`historicReadingsBucket`, historyReadingsBucket.bucketName);
   }
 
   output = (key: keyof OutputObject, value: string) => {
-    new CfnOutput(this, key, {
+    new CfnOutput(this, `${stripNonAlpha(this.id)}${key}`, {
       value,
-      exportName: key,
+      exportName: `${stripNonAlpha(this.id)}${key}`,
     });
   };
 }
