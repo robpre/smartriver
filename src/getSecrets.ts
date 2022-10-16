@@ -2,6 +2,16 @@ import SecretType from "../.secrets.json";
 import { APP_NAME, mustGet } from "./config";
 import { memo } from "./lib/memo";
 
+class MissingEnvKeyError extends Error {
+  code: string;
+
+  constructor(msg: string, code: string) {
+    super(`${code}: ${msg}`);
+
+    this.code = code;
+  }
+}
+
 /**
  * SSR only
  */
@@ -10,7 +20,10 @@ export const getSecrets = memo(() => {
     const file = require("../.secrets.json") as SecretType;
 
     if (!file[APP_NAME]) {
-      throw new Error(`Missing ${APP_NAME} in ${Object.keys(file)}`);
+      throw new MissingEnvKeyError(
+        `Missing ${APP_NAME} in ${Object.keys(file)}`,
+        "MISSING_ENV"
+      );
     }
 
     return {
@@ -20,21 +33,20 @@ export const getSecrets = memo(() => {
       appStorageTableName: mustGet(file[APP_NAME], "appStorageTableName"),
     };
   } catch (err) {
-    if (err && (err as { code: string }).code === "MODULE_NOT_FOUND") {
-      console.error("missing data");
-      return null;
+    if (err && typeof err == "object" && "code" in err) {
+      const errCode = (err as { code: unknown }).code;
+      if (errCode === "MODULE_NOT_FOUND" || errCode === "MISSING_ENV") {
+        console.warn("missing data in env, ", err);
+
+        return {
+          vercelAccessKeyId: "",
+          vercelAccessKeySecret: "",
+          historicReadingsBucket: "",
+          appStorageTableName: "",
+        };
+      }
     }
 
     throw err;
   }
 });
-
-export const mustGetSecrets = () => {
-  const secrets = getSecrets();
-
-  if (!secrets) {
-    throw new Error("Need secrets here");
-  }
-
-  return secrets;
-};

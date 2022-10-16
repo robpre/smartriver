@@ -6,13 +6,13 @@ import {
   GetObjectOutput,
 } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
-import { mustGetSecrets } from "../getSecrets";
+import { getSecrets } from "../getSecrets";
 import { Station, LatestReading, StationID } from "../types/StationResponse";
 import { aws } from "./aws";
 
 export const getStation = async (id: StationID): Promise<Station> => {
   const { s3 } = aws();
-  const { historicReadingsBucket } = mustGetSecrets();
+  const { historicReadingsBucket } = getSecrets();
 
   const response = await s3.send(
     new GetObjectCommand({
@@ -33,7 +33,7 @@ export const getStation = async (id: StationID): Promise<Station> => {
 export const saveStation = async (station: Station) => {
   const id = station.items.notation;
   const { s3 } = aws();
-  const { historicReadingsBucket } = mustGetSecrets();
+  const { historicReadingsBucket } = getSecrets();
 
   await s3.send(
     new PutObjectCommand({
@@ -69,7 +69,7 @@ const collectBody = async (
 
 const tryGetObject = async <T>(Key: string): Promise<T | null> => {
   const { s3 } = aws();
-  const { historicReadingsBucket } = mustGetSecrets();
+  const { historicReadingsBucket } = getSecrets();
 
   try {
     const r = await s3.send(
@@ -103,7 +103,7 @@ export const getReadings = async (id: StationID) => {
 
 export const addReading = async (id: StationID, reading: LatestReading) => {
   const { s3 } = aws();
-  const { historicReadingsBucket } = mustGetSecrets();
+  const { historicReadingsBucket } = getSecrets();
   const Key = readingsKey(id);
 
   let readings: LatestReading[] = await getReadings(id);
