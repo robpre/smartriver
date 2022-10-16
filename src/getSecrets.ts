@@ -40,7 +40,11 @@ export const getSecrets = memo(() => {
     if (err && typeof err == "object" && "code" in err) {
       const errCode = (err as { code: unknown }).code;
 
-      if (errCode === "MODULE_NOT_FOUND" || errCode === "MISSING_ENV") {
+      if (
+        errCode === "ENOENT" ||
+        errCode === "MODULE_NOT_FOUND" ||
+        errCode === "MISSING_ENV"
+      ) {
         console.warn(`path(${fullpath}) missing data in env, `, err);
 
         return {
