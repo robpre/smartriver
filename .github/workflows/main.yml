@@ -1,0 +1,10 @@
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+
+jobs:
+  test_schedule:
+    runs-on: ubuntu-latest
+    steps:
+        - run: |
+            curl -H "CRON_API_SECRET: ${CRON_API_SECRET}" "https://smartriver.top/api/cron"
