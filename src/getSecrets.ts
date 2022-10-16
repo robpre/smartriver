@@ -22,13 +22,8 @@ const printDir = (dir: string) => {
  * SSR only
  */
 export const getSecrets = memo(() => {
-  const fullpath = pathlib.join(process.cwd(), ".secrets.json");
-
-  printDir(process.cwd());
-  printDir(pathlib.dirname(fullpath));
-
   try {
-    const file = require(fullpath) as SecretType;
+    const file = require("../.secrets.json") as SecretType;
 
     if (!file[APP_NAME]) {
       throw new MissingEnvKeyError(
@@ -52,7 +47,7 @@ export const getSecrets = memo(() => {
         errCode === "MODULE_NOT_FOUND" ||
         errCode === "MISSING_ENV"
       ) {
-        console.warn(`path(${fullpath}) missing data in env, `, err);
+        console.warn(`missing data in env, `, err);
 
         return {
           vercelAccessKeyId: "",
