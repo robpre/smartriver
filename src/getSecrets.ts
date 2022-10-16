@@ -14,6 +14,10 @@ class MissingEnvKeyError extends Error {
   }
 }
 
+const printDir = (dir: string) => {
+  console.log(dir, fs.readdirSync(dir));
+};
+
 /**
  * SSR only
  */
@@ -23,6 +27,9 @@ export const getSecrets = memo(() => {
   if (NODE_ENV === "production") {
     fullpath = pathlib.join(process.cwd(), ".next", ".secrets.json");
   }
+
+  printDir(process.cwd());
+  printDir(pathlib.join(process.cwd(), ".next"));
 
   try {
     const contents = fs.readFileSync(fullpath).toString();
