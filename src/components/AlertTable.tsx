@@ -24,7 +24,7 @@ const TD: FC<{
   style?: CSSProperties;
   append?: string;
   alt?: string;
-}> = ({ children, style, append, alt = "false" }) => (
+}> = ({ children, style, append, alt = "no" }) => (
   <td style={style}>
     {children || alt}
     {children ? append : null}
@@ -124,7 +124,7 @@ export const AlertTable: FC<Props> = ({ data }) => (
               </span>
             </th>
             <TD style={{ textAlign: "left", border: "1px solid black" }}>
-              {val && val.activated}
+              {val && val.activated && "yes"}
             </TD>
             <TD
               style={{ textAlign: "left", border: "1px solid black" }}
