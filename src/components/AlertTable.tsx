@@ -82,30 +82,25 @@ const extra = (
   }
 };
 
+const style: CSSProperties = {
+  backgroundColor: "#16383b",
+  textAlign: "left",
+  border: "1px solid black",
+};
+
 export const AlertTable: FC<Props> = ({ data }) => (
   <table className={classes.Table}>
     <caption>Alerts</caption>
     <thead>
       <tr>
-        <th style={{ textAlign: "left", border: "1px solid black" }}>
-          Datapoint
-        </th>
-        <th
-          style={{ textAlign: "left", border: "1px solid black" }}
-          scope="col"
-        >
+        <th style={style}>Datapoint</th>
+        <th style={style} scope="col">
           Is triggered
         </th>
-        <th
-          style={{ textAlign: "left", border: "1px solid black" }}
-          scope="col"
-        >
+        <th style={style} scope="col">
           Value (in meters)
         </th>
-        <th
-          style={{ textAlign: "left", border: "1px solid black" }}
-          scope="col"
-        >
+        <th style={style} scope="col">
           At
         </th>
       </tr>
@@ -114,29 +109,17 @@ export const AlertTable: FC<Props> = ({ data }) => (
       {Object.entries(data.state).map(([key, val]) => {
         return (
           <tr key={key}>
-            <th
-              style={{ textAlign: "left", border: "1px solid black" }}
-              scope="row"
-            >
+            <th style={style} scope="row">
               <span>{pretty(key)}</span>{" "}
               <span>
                 {extra(data.station.items, key as AlertTypes, data.readings)}
               </span>
             </th>
-            <TD style={{ textAlign: "left", border: "1px solid black" }}>
-              {val && val.activated && "yes"}
-            </TD>
-            <TD
-              style={{ textAlign: "left", border: "1px solid black" }}
-              append=" Meters"
-              alt="--"
-            >
+            <TD style={style}>{val && val.activated && "yes"}</TD>
+            <TD style={style} append=" Meters" alt="--">
               {val && val.value}
             </TD>
-            <TD
-              style={{ textAlign: "left", border: "1px solid black" }}
-              alt="--"
-            >
+            <TD style={style} alt="--">
               {val && d(val.dateTime)}
             </TD>
           </tr>
