@@ -47,7 +47,7 @@ const extra = (
   alert: AlertTypes,
   readings: LatestReading[]
 ) => {
-  const style: CSSProperties = { fontSize: "0.8em", color: "#f5dcd5" };
+  const style: CSSProperties = { fontSize: "0.8em", color: "#f3e6e2" };
 
   switch (alert) {
     case AlertTypes.HigherThanTypicalRangeHigh:
@@ -85,7 +85,8 @@ const extra = (
 const style: CSSProperties = {
   backgroundColor: "#16383b",
   textAlign: "left",
-  border: "1px solid black",
+  border: "1px solid #b1d8eb",
+  color: "#f3e6e2",
 };
 
 export const AlertTable: FC<Props> = ({ data }) => (
