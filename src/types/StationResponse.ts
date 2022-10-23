@@ -1,14 +1,14 @@
-export interface Station {
+export interface StationResponse {
   "@context": string;
   meta: Meta;
-  items: Item;
+  items: Station;
 }
 
 export type StationLabel = string;
 
 export type StationID = string;
 
-export interface Item {
+export interface Station {
   "@id": string;
   RLOIid: string;
   catchmentName: string;

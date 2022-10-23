@@ -25,6 +25,7 @@
     "@aws-sdk/client-ses": "3.188.0",
     "@aws-sdk/lib-dynamodb": "3.188.0",
     "@aws-sdk/types": "3.188.0",
+    "date-fns": "2.29.3",
     "next": "12.3.1",
     "node-fetch": "3.2.10",
     "react": "18.2.0",

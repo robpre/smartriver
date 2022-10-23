@@ -1,4 +1,5 @@
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
+
 import { getSecrets } from "../getSecrets";
 import { Key, Entity, EntityNames, NoKey } from "../types/DB";
 import { aws } from "./aws";
@@ -13,7 +14,7 @@ export async function putItem<E extends EntityNames>(
   const Item: Entity<E> = {
     ...obj,
     ...key,
-  };
+  } as unknown as Entity<E>; // ts gets confused because we're combining NoKey & Key
 
   await db.send(
     new PutCommand({

@@ -7,10 +7,14 @@ import {
 } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
 import { getSecrets } from "../getSecrets";
-import { Station, LatestReading, StationID } from "../types/StationResponse";
+import {
+  StationResponse,
+  LatestReading,
+  StationID,
+} from "../types/StationResponse";
 import { aws } from "./aws";
 
-export const getStation = async (id: StationID): Promise<Station> => {
+export const getStation = async (id: StationID): Promise<StationResponse> => {
   const { s3 } = aws();
   const { historicReadingsBucket } = getSecrets();
 
@@ -30,7 +34,7 @@ export const getStation = async (id: StationID): Promise<Station> => {
   return JSON.parse(text);
 };
 
-export const saveStation = async (station: Station) => {
+export const saveStation = async (station: StationResponse) => {
   const id = station.items.notation;
   const { s3 } = aws();
   const { historicReadingsBucket } = getSecrets();

@@ -1,16 +1,18 @@
 import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import stations from "../../manual-scraped-data/stations.json";
-import { getReadings } from "../lib/bucketStorage";
+import { StationSection } from "../components/StationSection";
+import { getReadings, getStation } from "../lib/bucketStorage";
+import { getStationId } from "../lib/getStationId";
 import { manualHeightData, ConvertedCSV } from "../lib/processReadings";
-import { LatestReading, StationID } from "../types/StationResponse";
+import { LatestReading, Station, StationID } from "../types/StationResponse";
 
 interface Props {
   allReadings: Array<{
     id: StationID;
     readings: LatestReading[];
     scraped: ConvertedCSV | null;
-    station: typeof stations.items[number];
+    station: Station;
   }>;
 }
 
@@ -33,19 +35,7 @@ const Home: NextPage<Props> = ({ allReadings }) => {
         <h1>Water</h1>
 
         {allReadings.map((r) => (
-          <section key={r.id}>
-            <h2>
-              station: {r.station.riverName} -- {r.station.label} ({r.id})
-            </h2>
-
-            <a
-              href={`https://check-for-flooding.service.gov.uk/station/${r.station.RLOIid}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              check-for-flooding.service.gov.uk/station/{r.station.RLOIid}
-            </a>
-
+          <StationSection key={r.id} station={r.station}>
             <p>scraped average: {r.scraped && averageScraped(r.scraped)}</p>
 
             <p>s3 readings:</p>
@@ -59,7 +49,7 @@ const Home: NextPage<Props> = ({ allReadings }) => {
                 </li>
               ))}
             </ul>
-          </section>
+          </StationSection>
         ))}
       </main>
     </div>
@@ -71,7 +61,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
     stations.items.map(async (station) => {
       return {
         id: station.notation,
-        station,
+        station: (await getStation(getStationId(station))).items,
         readings: await getReadings(station.notation),
         scraped: manualHeightData[station.label] || null,
       };

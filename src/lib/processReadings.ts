@@ -1,7 +1,7 @@
 import Corpusty from "../../manual-scraped-data/Corpusty-height-data.csv.json";
 import Ingworth from "../../manual-scraped-data/Ingworth-height-data.csv.json";
 
-import { StationLabel, Station } from "../types/StationResponse";
+import { StationLabel, StationResponse } from "../types/StationResponse";
 
 export type ConvertedCSV = typeof Corpusty | typeof Ingworth;
 
