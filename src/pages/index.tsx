@@ -31,7 +31,7 @@ const Home: NextPage<Props> = ({ allReadings }) => {
         <title>Create Next App</title>
       </Head>
 
-      <main>
+      <main style={{ color: 'red' }}>
         <h1>Water</h1>
 
         {allReadings.map((r) => (
